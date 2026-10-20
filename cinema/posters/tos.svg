@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900" viewBox="0 0 600 900">
+ <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#6fd0b7"/><stop offset="1" stop-color="#153747"/></linearGradient><radialGradient id="r"><stop stop-color="#fff" stop-opacity=".25"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>
+ <rect width="600" height="900" fill="#0c0d12"/><rect x="18" y="18" width="564" height="864" rx="34" fill="url(#g)"/>
+ <circle cx="445" cy="220" r="250" fill="url(#r)"/><path d="M0 660 Q160 560 300 670 T600 610 V900 H0Z" fill="#07090e" fill-opacity=".56"/>
+ <text x="300" y="485" text-anchor="middle" fill="#fff" fill-opacity=".9" font-family="Arial,sans-serif" font-size="250" font-weight="800">T</text>
+ <text x="54" y="747" fill="#fff" font-family="Arial,sans-serif" font-size="60" font-weight="700">钢铁之泪</text>
+ <text x="57" y="800" fill="#fff" fill-opacity=".7" font-family="Arial,sans-serif" font-size="22" letter-spacing="4">TEARS OF STEEL</text>
+ <text x="57" y="844" fill="#fff" fill-opacity=".48" font-family="Arial,sans-serif" font-size="18" letter-spacing="3">OPEN MOVIE</text></svg>
