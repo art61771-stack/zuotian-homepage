@@ -1,261 +1,37 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="description" content="Zuotian 的个人主页——独立开发、产品设计与开源探索。">
-  <meta name="theme-color" content="#090b10">
-  <title>Zuotian — Build ideas into reality</title>
-  <style>
-    :root {
-      color-scheme: dark;
-      --bg:#090b10; --surface:#11141b; --surface-2:#171b24;
-      --text:#f6f7fb; --muted:#9aa3b6; --line:rgba(255,255,255,.09);
-      --violet:#9b8cff; --blue:#65b8ff; --green:#72e7bc;
-      --shadow:0 28px 90px rgba(0,0,0,.38);
-    }
-    * { box-sizing:border-box; }
-    html { scroll-behavior:smooth; }
-    body {
-      margin:0; min-height:100vh; overflow-x:hidden;
-      font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
-      color:var(--text); background:var(--bg); line-height:1.6;
-      -webkit-font-smoothing:antialiased;
-    }
-    body::before {
-      content:""; position:fixed; inset:0; z-index:-3; pointer-events:none;
-      background:
-        radial-gradient(800px 500px at 10% -5%,rgba(101,184,255,.16),transparent 64%),
-        radial-gradient(700px 500px at 100% 18%,rgba(155,140,255,.15),transparent 62%),
-        radial-gradient(650px 500px at 45% 100%,rgba(114,231,188,.08),transparent 65%);
-    }
-    body::after {
-      content:""; position:fixed; inset:0; z-index:-2; opacity:.16; pointer-events:none;
-      background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
-      background-size:64px 64px; mask-image:linear-gradient(to bottom,black,transparent 75%);
-    }
-    a { color:inherit; text-decoration:none; }
-    button { font:inherit; }
-    .noise { position:fixed; inset:0; z-index:20; pointer-events:none; opacity:.025; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E"); }
-    .wrap { width:min(1120px,calc(100% - 40px)); margin-inline:auto; }
-    .nav {
-      position:fixed; left:50%; top:18px; z-index:30; transform:translateX(-50%);
-      width:min(760px,calc(100% - 28px)); height:58px; padding:7px 8px 7px 18px;
-      display:flex; align-items:center; justify-content:space-between;
-      border:1px solid var(--line); border-radius:20px;
-      background:rgba(12,14,20,.7); backdrop-filter:blur(20px) saturate(140%);
-      box-shadow:0 10px 35px rgba(0,0,0,.25);
-    }
-    .brand { display:flex; align-items:center; gap:10px; font-weight:760; letter-spacing:-.02em; }
-    .brand-mark { width:28px; height:28px; display:grid; place-items:center; border-radius:9px; background:linear-gradient(135deg,var(--blue),var(--violet)); color:#071018; font-size:14px; box-shadow:0 0 24px rgba(101,184,255,.28); }
-    .nav-links { display:flex; align-items:center; gap:4px; }
-    .nav-links a { padding:9px 13px; color:var(--muted); font-size:14px; border-radius:12px; transition:.2s; }
-    .nav-links a:hover { color:var(--text); background:rgba(255,255,255,.06); }
-    .nav-links .github { color:var(--text); background:rgba(255,255,255,.08); border:1px solid var(--line); }
-    .hero { min-height:100svh; display:grid; align-items:center; padding:145px 0 90px; position:relative; }
-    .hero-grid { display:grid; grid-template-columns:minmax(0,1.2fr) minmax(310px,.8fr); gap:72px; align-items:center; }
-    .status { display:inline-flex; align-items:center; gap:9px; color:#c8d0df; font-size:13px; font-weight:650; letter-spacing:.03em; border:1px solid var(--line); background:rgba(255,255,255,.035); padding:7px 12px; border-radius:999px; }
-    .status-dot { width:7px; height:7px; border-radius:50%; background:var(--green); box-shadow:0 0 0 5px rgba(114,231,188,.1),0 0 18px var(--green); animation:pulse 2s ease-in-out infinite; }
-    h1 { margin:25px 0 25px; font-size:clamp(58px,8.2vw,112px); line-height:.88; letter-spacing:-.075em; font-weight:800; }
-    h1 span { display:block; color:transparent; background:linear-gradient(110deg,#fff 0%,#b6c7ff 36%,#9b8cff 70%,#65b8ff 100%); background-clip:text; -webkit-background-clip:text; }
-    .lead { max-width:640px; margin:0; color:var(--muted); font-size:clamp(18px,2vw,22px); line-height:1.7; }
-    .lead strong { color:#dbe2f0; font-weight:620; }
-    .hero-actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:36px; }
-    .btn { min-height:48px; display:inline-flex; align-items:center; justify-content:center; gap:9px; padding:0 19px; border-radius:14px; border:1px solid var(--line); font-size:14px; font-weight:700; transition:.22s ease; }
-    .btn-primary { color:#071018; background:linear-gradient(135deg,#a8d8ff,#a79aff); border:0; box-shadow:0 12px 35px rgba(125,152,255,.2); }
-    .btn-secondary { background:rgba(255,255,255,.04); }
-    .btn:hover { transform:translateY(-3px); box-shadow:0 14px 35px rgba(0,0,0,.22); }
-    .arrow { transition:transform .2s; }
-    .btn:hover .arrow { transform:translate(3px,-3px); }
-    .portrait-shell { position:relative; min-height:450px; display:grid; place-items:center; }
-    .orbit { position:absolute; border:1px solid rgba(255,255,255,.08); border-radius:50%; animation:spin 20s linear infinite; }
-    .orbit.one { width:380px; height:380px; }
-    .orbit.two { width:300px; height:300px; animation-direction:reverse; animation-duration:14s; }
-    .orbit::after { content:""; position:absolute; width:10px; height:10px; border-radius:50%; top:18%; left:4%; background:var(--blue); box-shadow:0 0 20px var(--blue); }
-    .orbit.two::after { top:auto; left:auto; right:7%; bottom:16%; background:var(--violet); box-shadow:0 0 20px var(--violet); }
-    .avatar { width:232px; height:286px; position:relative; display:grid; place-items:center; overflow:hidden; border-radius:42% 42% 38% 38% / 34% 34% 48% 48%; background:linear-gradient(145deg,rgba(101,184,255,.26),rgba(155,140,255,.19)); border:1px solid rgba(255,255,255,.16); box-shadow:inset 0 1px rgba(255,255,255,.2),0 40px 80px rgba(0,0,0,.4),0 0 80px rgba(112,134,255,.12); }
-    .avatar::before { content:"Z"; font:800 132px/1 ui-sans-serif,-apple-system,sans-serif; letter-spacing:-.1em; color:rgba(255,255,255,.86); transform:translateX(-7px); text-shadow:0 14px 50px rgba(25,32,70,.45); }
-    .avatar::after { content:""; position:absolute; inset:0; background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.16) 48%,transparent 62%); transform:translateX(-120%); animation:shine 5s ease-in-out infinite; }
-    .float-tag { position:absolute; display:flex; align-items:center; gap:8px; padding:9px 13px; color:#cdd5e4; font-size:12px; font-weight:680; border:1px solid var(--line); border-radius:13px; background:rgba(15,18,25,.8); backdrop-filter:blur(14px); box-shadow:0 14px 35px rgba(0,0,0,.28); }
-    .float-tag.code { left:6px; top:95px; animation:float 4.5s ease-in-out infinite; }
-    .float-tag.idea { right:0; bottom:94px; animation:float 5s ease-in-out .7s infinite; }
-    .tag-icon { color:var(--green); }
-    section { padding:105px 0; }
-    .section-head { display:flex; justify-content:space-between; align-items:end; gap:30px; margin-bottom:38px; }
-    .kicker { margin:0 0 9px; color:var(--blue); font-size:12px; font-weight:800; letter-spacing:.17em; text-transform:uppercase; }
-    h2 { margin:0; font-size:clamp(34px,5vw,58px); line-height:1.03; letter-spacing:-.045em; }
-    .section-copy { max-width:430px; margin:0; color:var(--muted); font-size:15px; }
-    .projects { display:grid; grid-template-columns:repeat(12,1fr); gap:18px; }
-    .card { position:relative; min-height:275px; overflow:hidden; padding:28px; border:1px solid var(--line); border-radius:24px; background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.022)); box-shadow:inset 0 1px rgba(255,255,255,.035); transition:transform .28s ease,border-color .28s ease,background .28s ease; }
-    .card:hover { transform:translateY(-7px); border-color:rgba(155,140,255,.32); background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.027)); }
-    .card.large { grid-column:span 7; }
-    .card.small { grid-column:span 5; }
-    .card-top { display:flex; justify-content:space-between; align-items:center; }
-    .project-icon { width:42px; height:42px; display:grid; place-items:center; border:1px solid var(--line); border-radius:13px; background:rgba(255,255,255,.055); font-size:18px; }
-    .project-lang { padding:5px 9px; border:1px solid var(--line); border-radius:999px; color:var(--muted); font-size:11px; font-weight:700; }
-    .card h3 { margin:54px 0 9px; font-size:24px; letter-spacing:-.035em; }
-    .card p { margin:0; max-width:520px; color:var(--muted); font-size:14px; line-height:1.65; }
-    .card-link { position:absolute; right:25px; bottom:22px; width:37px; height:37px; display:grid; place-items:center; border:1px solid var(--line); border-radius:50%; color:#d7deed; transition:.22s; }
-    .card:hover .card-link { color:#071018; background:var(--text); transform:rotate(8deg); }
-    .glow { position:absolute; width:200px; height:200px; right:-100px; top:-100px; border-radius:50%; filter:blur(25px); opacity:.13; }
-    .blue { background:var(--blue); } .violet { background:var(--violet); } .green { background:var(--green); }
-    .manifesto { display:grid; grid-template-columns:.8fr 1.2fr; gap:70px; align-items:start; padding-block:125px; }
-    .manifesto-quote { margin:0; font-size:clamp(31px,4.5vw,54px); font-weight:720; line-height:1.13; letter-spacing:-.045em; }
-    .manifesto-quote span { color:var(--muted); }
-    .principles { display:grid; gap:10px; }
-    .principle { display:grid; grid-template-columns:48px 1fr; gap:16px; align-items:start; padding:18px; border-radius:17px; transition:.2s; }
-    .principle:hover { background:rgba(255,255,255,.035); }
-    .number { color:var(--blue); font-size:12px; font-weight:800; letter-spacing:.1em; padding-top:4px; }
-    .principle h3 { margin:0 0 4px; font-size:17px; }
-    .principle p { margin:0; color:var(--muted); font-size:14px; }
-    .contact { position:relative; overflow:hidden; margin:10px 0 70px; padding:70px clamp(28px,7vw,78px); text-align:center; border:1px solid var(--line); border-radius:32px; background:linear-gradient(145deg,rgba(101,184,255,.11),rgba(155,140,255,.08)); box-shadow:var(--shadow); }
-    .contact::before { content:""; position:absolute; width:500px; height:500px; top:-390px; left:50%; transform:translateX(-50%); border-radius:50%; background:var(--blue); filter:blur(90px); opacity:.18; }
-    .contact h2 { position:relative; max-width:720px; margin-inline:auto; }
-    .contact p { position:relative; max-width:570px; margin:18px auto 30px; color:var(--muted); }
-    .contact .btn { position:relative; }
-    footer { display:flex; justify-content:space-between; gap:20px; padding:0 0 38px; color:#697286; font-size:12px; }
-    .reveal,.js-ready .reveal,.js-ready .reveal.visible { opacity:1!important; transform:none!important; animation:none!important; }
-    @keyframes pulse { 50% { opacity:.45; transform:scale(.85); } }
-    @keyframes spin { to { transform:rotate(360deg); } }
-    @keyframes float { 50% { transform:translateY(-9px); } }
-    @keyframes shine { 45%,100% { transform:translateX(120%); } }
-    @keyframes rise-in { from { opacity:.01; transform:translateY(22px); } to { opacity:1; transform:none; } }
-    @media (max-width:820px) {
-      .nav-links a:not(.github) { display:none; }
-      .hero { padding-top:125px; }
-      .hero-grid { grid-template-columns:1fr; gap:22px; }
-      .hero-copy { text-align:center; }
-      .status { margin-inline:auto; }
-      .lead { margin-inline:auto; }
-      .hero-actions { justify-content:center; }
-      .portrait-shell { min-height:390px; transform:scale(.88); margin:-15px 0 -30px; }
-      .section-head { align-items:start; flex-direction:column; }
-      .card.large,.card.small { grid-column:span 12; }
-      .manifesto { grid-template-columns:1fr; gap:45px; }
-    }
-    @media (max-width:520px) {
-      .wrap { width:min(100% - 26px,1120px); }
-      .nav { top:10px; height:54px; border-radius:17px; }
-      .nav-links .github { padding:8px 11px; }
-      h1 { font-size:clamp(56px,18vw,80px); }
-      .lead { font-size:17px; }
-      section { padding:75px 0; }
-      .portrait-shell { transform:scale(.75); min-height:345px; margin:-30px 0 -55px; }
-      .card { min-height:285px; padding:23px; }
-      .card h3 { margin-top:48px; }
-      .contact { padding-block:55px; border-radius:25px; }
-      footer { flex-direction:column; align-items:center; text-align:center; }
-    }
-    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } *,*::before,*::after { animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; } .reveal { opacity:1; transform:none; } }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Zuotian 的个人空间：作品、在线影院与持续探索。">
+<meta name="theme-color" content="#0d0e10">
+<title>Zuotian — Personal Space</title>
+<style>
+:root{color-scheme:dark;--bg:#0d0e10;--paper:#141517;--paper2:#191a1d;--text:#f2efe8;--muted:#989792;--line:rgba(255,255,255,.09);--gold:#cbb98b;--green:#8fb7a1;--max:1120px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;-webkit-font-smoothing:antialiased;line-height:1.65}body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-2;background:radial-gradient(800px 500px at 78% -10%,rgba(203,185,139,.1),transparent 70%),radial-gradient(650px 500px at -10% 65%,rgba(82,106,94,.1),transparent 70%)}a{color:inherit;text-decoration:none}.wrap{width:min(var(--max),calc(100% - 44px));margin:auto}
+.nav{height:78px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}.logo{display:flex;align-items:center;gap:12px;font-size:15px;font-weight:650;letter-spacing:.02em}.logo-mark{width:34px;height:34px;display:grid;place-items:center;border-radius:50%;border:1px solid rgba(203,185,139,.4);color:var(--gold);font:600 15px Georgia,serif}.nav-links{display:flex;align-items:center;gap:28px;color:var(--muted);font-size:13px}.nav-links a{transition:.2s}.nav-links a:hover{color:var(--text)}.nav-cta{padding:9px 15px;border:1px solid var(--line);border-radius:999px;color:var(--text)!important}
+.hero{min-height:calc(100svh - 78px);display:grid;grid-template-columns:1.08fr .92fr;gap:78px;align-items:center;padding:90px 0}.eyebrow{display:flex;align-items:center;gap:10px;color:var(--gold);font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase}.eyebrow:before{content:"";width:32px;height:1px;background:var(--gold)}h1{margin:23px 0 25px;max-width:670px;font-family:Georgia,"Times New Roman","Songti SC",serif;font-weight:400;font-size:clamp(46px,5.5vw,72px);line-height:1.07;letter-spacing:-.05em}h1 em{font-style:italic;color:var(--gold)}.intro{max-width:590px;color:var(--muted);font-size:17px;line-height:1.9}.actions{display:flex;flex-wrap:wrap;gap:11px;margin-top:34px}.btn{min-height:47px;padding:0 19px;display:inline-flex;align-items:center;gap:9px;border:1px solid var(--line);border-radius:999px;font-size:13px;font-weight:650;transition:.25s}.btn:hover{transform:translateY(-2px);border-color:rgba(203,185,139,.5)}.btn-main{background:var(--text);color:#111;border-color:var(--text)}.btn-main:hover{background:#fff}.hero-card{position:relative;min-height:520px;border:1px solid var(--line);border-radius:34px;overflow:hidden;background:linear-gradient(145deg,#191a1c,#111214);box-shadow:0 35px 100px rgba(0,0,0,.28)}.hero-card:before{content:"";position:absolute;width:420px;height:420px;right:-150px;top:-180px;border-radius:50%;background:rgba(203,185,139,.14);filter:blur(15px)}.hero-card:after{content:"";position:absolute;inset:18px;border:1px solid rgba(255,255,255,.055);border-radius:24px;pointer-events:none}.cinema-frame{position:absolute;inset:0;padding:48px;display:flex;flex-direction:column;justify-content:space-between}.cinema-top{display:flex;justify-content:space-between;align-items:center;color:#b3b0a8;font-size:11px;letter-spacing:.15em;text-transform:uppercase}.live{display:flex;align-items:center;gap:7px}.live i{width:6px;height:6px;border-radius:50%;background:#80b99a;box-shadow:0 0 12px #80b99a}.screen{align-self:center;width:210px;height:280px;border-radius:105px 105px 28px 28px;display:grid;place-items:center;background:linear-gradient(160deg,#353229,#151617 60%);border:1px solid rgba(203,185,139,.28);box-shadow:0 25px 60px rgba(0,0,0,.3),inset 0 1px rgba(255,255,255,.08)}.play{width:64px;height:64px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.28);border-radius:50%;font-size:18px;padding-left:4px}.cinema-bottom h2{margin:0 0 7px;font-family:Georgia,"Songti SC",serif;font-size:30px;font-weight:400}.cinema-bottom p{margin:0;color:var(--muted);font-size:13px}.cinema-link{margin-top:18px;display:inline-flex;align-items:center;gap:8px;color:var(--gold);font-size:13px;font-weight:650}
+.strip{border-block:1px solid var(--line)}.strip-in{min-height:92px;display:grid;grid-template-columns:repeat(3,1fr);align-items:center}.strip-item{padding:0 32px;border-right:1px solid var(--line)}.strip-item:first-child{padding-left:0}.strip-item:last-child{border:0}.strip-item b{display:block;font:400 23px Georgia,serif;color:var(--text)}.strip-item span{color:var(--muted);font-size:12px}
+section{padding:118px 0}.section-head{display:grid;grid-template-columns:.85fr 1.15fr;gap:60px;align-items:end;margin-bottom:48px}.section-label{color:var(--gold);font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase}.section-head h2{margin:8px 0 0;font:400 clamp(36px,5vw,57px)/1.12 Georgia,"Songti SC",serif;letter-spacing:-.04em}.section-head p{margin:0;color:var(--muted);font-size:15px;max-width:500px}.works{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.work{min-height:290px;padding:30px;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:23px;background:rgba(255,255,255,.018);transition:.25s}.work:hover{background:rgba(255,255,255,.035);transform:translateY(-3px)}.work-top{display:flex;justify-content:space-between;color:var(--muted);font-size:11px;letter-spacing:.08em;text-transform:uppercase}.work h3{margin:auto 0 8px;font:400 28px Georgia,"Songti SC",serif}.work p{margin:0;color:var(--muted);font-size:13px;max-width:480px}.work-arrow{margin-top:22px;color:var(--gold);font-size:13px}
+.about{display:grid;grid-template-columns:1fr 1fr;gap:90px;align-items:start}.quote{margin:0;font:400 clamp(36px,5vw,60px)/1.2 Georgia,"Songti SC",serif;letter-spacing:-.04em}.quote span{color:#73736f}.principles{display:grid}.principle{display:grid;grid-template-columns:44px 1fr;gap:18px;padding:23px 0;border-bottom:1px solid var(--line)}.principle:first-child{padding-top:0}.principle .num{color:var(--gold);font:italic 15px Georgia,serif}.principle h3{margin:0 0 5px;font-size:16px;font-weight:600}.principle p{margin:0;color:var(--muted);font-size:13px}
+.end{padding:85px 0 100px}.end-card{padding:70px clamp(28px,7vw,82px);border:1px solid var(--line);border-radius:30px;background:linear-gradient(135deg,rgba(203,185,139,.09),rgba(255,255,255,.018));display:flex;justify-content:space-between;align-items:center;gap:40px}.end-card h2{margin:0;font:400 clamp(34px,5vw,57px)/1.12 Georgia,"Songti SC",serif}.end-card p{margin:10px 0 0;color:var(--muted);font-size:14px}.footer{height:88px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line);color:#74736e;font-size:11px;letter-spacing:.05em}
+@media(max-width:850px){.hero{grid-template-columns:1fr;padding-top:70px}.hero-copy{text-align:center}.eyebrow,.actions{justify-content:center}.intro{margin:auto}.hero-card{min-height:470px}.section-head,.about{grid-template-columns:1fr;gap:34px}.strip-in{grid-template-columns:1fr}.strip-item{padding:20px 0;border-right:0;border-bottom:1px solid var(--line)}.strip-item:last-child{border-bottom:0}.end-card{align-items:flex-start;flex-direction:column}.nav-links a:not(.nav-cta){display:none}}
+@media(max-width:560px){.wrap{width:min(100% - 28px,var(--max))}.nav{height:68px}.hero{min-height:auto;padding:65px 0 75px;gap:52px}h1{font-size:51px}.intro{font-size:15px}.hero-card{min-height:445px;border-radius:25px}.cinema-frame{padding:34px}.screen{width:180px;height:245px}.works{grid-template-columns:1fr}.work{min-height:255px}.section-head{margin-bottom:32px}section{padding:82px 0}.about{gap:48px}.end{padding:55px 0 70px}.end-card{border-radius:22px}.footer{height:auto;padding:28px 0;gap:9px;flex-direction:column;align-items:flex-start}}
+</style>
 </head>
 <body>
-  <div class="noise" aria-hidden="true"></div>
-  <nav class="nav" aria-label="主导航">
-    <a class="brand" href="#top"><span class="brand-mark">Z</span><span>Zuotian</span></a>
-    <div class="nav-links">
-      <a href="#work">作品</a><a href="#about">关于</a><a href="cinema/">在线影院</a>
-      <a class="github" href="https://github.com/art61771-stack" target="_blank" rel="noopener">GitHub ↗</a>
-    </div>
-  </nav>
-
-  <main id="top">
-    <header class="hero wrap">
-      <div class="hero-grid">
-        <div class="hero-copy reveal">
-          <div class="status"><span class="status-dot"></span>持续创造中</div>
-          <h1>创造不止于<span>想象。</span></h1>
-          <p class="lead">你好，我是 <strong>Zuotian</strong>。我关注独立开发、产品体验与开源技术，把复杂的问题，变成简单、精致且真正能用的作品。</p>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="cinema/">在线影院 <span>▶</span></a>
-            <a class="btn btn-secondary" href="#work">探索作品 <span>↓</span></a>
-            <a class="btn btn-secondary" href="https://github.com/art61771-stack" target="_blank" rel="noopener">查看 GitHub <span class="arrow">↗</span></a>
-          </div>
-        </div>
-        <div class="portrait-shell reveal" aria-hidden="true">
-          <div class="orbit one"></div><div class="orbit two"></div>
-          <div class="avatar"></div>
-          <div class="float-tag code"><span class="tag-icon">●</span> Build with code</div>
-          <div class="float-tag idea"><span class="tag-icon">✦</span> Ship the idea</div>
-        </div>
-      </div>
-    </header>
-
-    <section id="work" class="wrap">
-      <div class="section-head reveal">
-        <div><p class="kicker">Selected work</p><h2>近期作品</h2></div>
-        <p class="section-copy">围绕自动化、系统体验与网络工具展开的实践。每个项目都从真实问题出发。</p>
-      </div>
-      <div class="projects">
-        <article class="card large reveal">
-          <span class="glow blue"></span>
-          <div class="card-top"><span class="project-icon">☁</span><span class="project-lang">Python</span></div>
-          <h3>CF Node Health</h3>
-          <p>面向 Cloudflare 节点的自动健康检测与区域配额维护工具，让服务状态更透明、替换流程更可靠。</p>
-          <a class="card-link" href="https://github.com/art61771-stack/cf-node-health" target="_blank" rel="noopener" aria-label="打开 CF Node Health">↗</a>
-        </article>
-        <article class="card small reveal">
-          <span class="glow violet"></span>
-          <div class="card-top"><span class="project-icon">⌘</span><span class="project-lang">Objective-C</span></div>
-          <h3>CCWeather</h3>
-          <p>控制中心天气模块的源码重构与体验探索，专注原生感、动画和丰富的个性化能力。</p>
-          <a class="card-link" href="https://github.com/art61771-stack/CCWeatherModule-Reconstructed" target="_blank" rel="noopener" aria-label="打开 CCWeather">↗</a>
-        </article>
-        <article class="card small reveal">
-          <span class="glow green"></span>
-          <div class="card-top"><span class="project-icon">✓</span><span class="project-lang">Python</span></div>
-          <h3>QX Clean Subscription</h3>
-          <p>严格失败关闭的低延迟订阅筛选器，只使用经授权来源，并将风险控制放在速度之前。</p>
-          <a class="card-link" href="https://github.com/art61771-stack/qx-clean-subscription" target="_blank" rel="noopener" aria-label="打开 QX Clean Subscription">↗</a>
-        </article>
-        <article class="card large reveal">
-          <span class="glow blue"></span>
-          <div class="card-top"><span class="project-icon">↯</span><span class="project-lang">Automation</span></div>
-          <h3>QX Node Subscription</h3>
-          <p>自动采集、验证和发布节点的工作流。通过持续检测与标准化输出，减少重复维护工作。</p>
-          <a class="card-link" href="https://github.com/art61771-stack/qx-node-subscription" target="_blank" rel="noopener" aria-label="打开 QX Node Subscription">↗</a>
-        </article>
-      </div>
-    </section>
-
-    <section id="about" class="wrap manifesto">
-      <div class="reveal"><p class="kicker">My approach</p><p class="manifesto-quote">少一点噪音，<br><span>多一点真正<br>有用的创造。</span></p></div>
-      <div class="principles reveal">
-        <div class="principle"><span class="number">01</span><div><h3>从真实问题出发</h3><p>不为功能而功能，先理解场景，再寻找最短、最稳妥的解决路径。</p></div></div>
-        <div class="principle"><span class="number">02</span><div><h3>细节就是产品</h3><p>速度、文案、反馈与边界状态，共同决定一件作品是否让人愿意使用。</p></div></div>
-        <div class="principle"><span class="number">03</span><div><h3>持续交付与验证</h3><p>用自动化减少人为误差，让每次迭代都可追踪、可验证、可继续演进。</p></div></div>
-      </div>
-    </section>
-
-    <section class="wrap reveal">
-      <div class="contact">
-        <p class="kicker">Keep exploring</p>
-        <h2>让下一个想法，<br>成为可以触碰的作品。</h2>
-        <p>更多实验、源码与更新会持续发布在 GitHub。</p>
-        <a class="btn btn-primary" href="https://github.com/art61771-stack" target="_blank" rel="noopener">前往 GitHub <span class="arrow">↗</span></a>
-      </div>
-    </section>
-  </main>
-
-  <footer class="wrap">
-    <span>© 2026 Zuotian. Crafted with curiosity.</span>
-    <span>zuotian.loc.cc</span>
-  </footer>
-
-  <script>
-    document.documentElement.classList.add('js-ready');
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12 });
-    document.querySelectorAll('.reveal').forEach((el, i) => {
-      el.style.transitionDelay = `${Math.min(i % 4, 3) * 70}ms`;
-      observer.observe(el);
-    });
-  </script>
-</body>
-</html>
+<header class="wrap nav">
+<a class="logo" href="#top"><span class="logo-mark">Z</span><span>Zuotian</span></a>
+<nav class="nav-links"><a href="#work">作品</a><a href="#about">关于</a><a href="cinema/">在线影院</a><a class="nav-cta" href="https://github.com/art61771-stack" target="_blank" rel="noopener">GitHub ↗</a></nav>
+</header>
+<main id="top">
+<section class="wrap hero">
+<div class="hero-copy"><div class="eyebrow">Independent creator</div><h1>把想法做成<br><em>优雅、好用的作品。</em></h1><p class="intro">你好，我是 Zuotian。这里收录我的独立开发实践、开源项目，以及一个无需登录即可使用的在线影院。</p><div class="actions"><a class="btn btn-main" href="cinema/">进入在线影院　▶</a><a class="btn" href="#work">浏览作品　↓</a></div></div>
+<a class="hero-card" href="cinema/" aria-label="进入在线影院"><div class="cinema-frame"><div class="cinema-top"><span>Open cinema</span><span class="live"><i></i> Online</span></div><div class="screen"><span class="play">▶</span></div><div class="cinema-bottom"><h2>幕光影院</h2><p>电影 · 连续剧 · 综艺 · 动漫 · 资讯</p><span class="cinema-link">无需登录，立即观看　↗</span></div></div></a>
+</section>
+<div class="strip"><div class="wrap strip-in"><div class="strip-item"><b>Open</b><span>无需注册与会员限制</span></div><div class="strip-item"><b>Reliable</b><span>自动切换可用影视线路</span></div><div class="strip-item"><b>Crafted</b><span>关注细节与真实使用体验</span></div></div></div>
+<section id="work" class="wrap"><div class="section-head"><div><div class="section-label">Selected works</div><h2>做真实而持续的创造。</h2></div><p>从系统体验、自动化到网络工具，每个项目都从一个具体问题开始，并通过不断验证走向稳定可用。</p></div><div class="works"><a class="work" href="https://github.com/art61771-stack/CCWeatherModule-Reconstructed" target="_blank" rel="noopener"><div class="work-top"><span>01 · System experience</span><span>Objective-C</span></div><h3>CCWeather</h3><p>控制中心天气模块的源码重构与体验探索，专注原生感、布局细节与丰富的个性化能力。</p><span class="work-arrow">查看项目　↗</span></a><a class="work" href="https://github.com/art61771-stack/cf-node-health" target="_blank" rel="noopener"><div class="work-top"><span>02 · Automation</span><span>Python</span></div><h3>CF Node Health</h3><p>自动检测 Cloudflare 节点健康状态与区域配额，让服务维护流程更可靠、更透明。</p><span class="work-arrow">查看项目　↗</span></a><a class="work" href="https://github.com/art61771-stack/qx-clean-subscription" target="_blank" rel="noopener"><div class="work-top"><span>03 · Network tools</span><span>Python</span></div><h3>QX Clean Subscription</h3><p>严格失败关闭的低延迟订阅筛选工具，将来源授权、稳定性与风险控制放在速度之前。</p><span class="work-arrow">查看项目　↗</span></a><a class="work" href="cinema/"><div class="work-top"><span>04 · Web experience</span><span>Open cinema</span></div><h3>幕光影院</h3><p>无需注册、无试看限制的在线影院，支持五大内容板块、搜索、多集播放与三线自动切换。</p><span class="work-arrow">进入影院　↗</span></a></div></section>
+<section id="about" class="wrap about"><p class="quote">少一点噪音，<br><span>多一点真正<br>有用的创造。</span></p><div class="principles"><div class="principle"><span class="num">01</span><div><h3>从真实问题出发</h3><p>先理解使用场景，再寻找最短、最稳妥的解决路径。</p></div></div><div class="principle"><span class="num">02</span><div><h3>细节就是产品</h3><p>速度、反馈、文案与边界状态共同决定最终体验。</p></div></div><div class="principle"><span class="num">03</span><div><h3>持续交付与验证</h3><p>用自动化减少人为误差，让每次迭代可追踪、可验证。</p></div></div></div></section>
+<section class="wrap end"><div class="end-card"><div><h2>现在，去看一部电影。</h2><p>电影、连续剧、综艺、动漫与资讯已经为你准备好。</p></div><a class="btn btn-main" href="cinema/">打开幕光影院　▶</a></div></section>
+</main><footer class="wrap footer"><span>© 2026 Zuotian</span><span>zuotian.loc.cc · Crafted with restraint</span></footer>
+</body></html>

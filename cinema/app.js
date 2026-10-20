@@ -13,6 +13,15 @@ const CFG = {
   topicCats: [],
 };
 
+/* 上游 1-5 是无内容父分类，映射到真实子分类。 */
+const MAIN_GROUPS = {
+  movie: { name: '电影', children: [[6,'动作片'],[7,'喜剧片'],[8,'爱情片'],[9,'科幻片'],[10,'恐怖片'],[11,'剧情片'],[12,'战争片'],[21,'纪录片'],[32,'悬疑片'],[33,'动画片'],[34,'犯罪片'],[35,'奇幻片'],[36,'邵氏电影'],[60,'Netflix电影']] },
+  series: { name: '连续剧', children: [[13,'国产剧'],[14,'香港剧'],[15,'台湾剧'],[16,'美国剧'],[22,'韩国剧'],[23,'日本剧'],[24,'海外剧'],[37,'泰剧'],[41,'短剧'],[61,'Netflix剧']] },
+  variety: { name: '综艺', children: [[25,'大陆综艺'],[26,'日韩综艺'],[27,'港台综艺'],[28,'欧美综艺'],[44,'演唱会']] },
+  anime: { name: '动漫', children: [[29,'国产动漫'],[30,'日韩动漫'],[31,'欧美动漫'],[42,'港台动漫'],[43,'海外动漫'],[53,'有声动漫'],[63,'漫剧'],[64,'儿童儿歌']] },
+  info: { name: '资讯', children: [[40,'影视解说'],[46,'预告片'],[39,'篮球'],[45,'足球'],[44,'演唱会']] },
+};
+
 /* ── 工具 ───────────────────────────── */
 const $ = (s, p = document) => p.querySelector(s);
 const $$ = (s, p = document) => [...p.querySelectorAll(s)];
@@ -46,7 +55,7 @@ async function api(params, allowFailover = true) {
 }
 
 /* ── 状态 ───────────────────────────── */
-const S = { cat: '', kw: '', page: 1, pages: 1, total: 0, list: [], cats: [], loading: false,
+const S = { cat: '', group: '', kw: '', page: 1, pages: 1, total: 0, list: [], cats: [], loading: false,
             line: 0, dead: new Set() };
 
 /* ── 骨架屏 ─────────────────────────── */
@@ -95,30 +104,20 @@ const bindLazy = root => $$('img[data-src]', root).forEach(i => io.observe(i));
 /* ── 分类 ───────────────────────────── */
 // 苹果CMS 只有 ac=list 会返回 class 分类表，videolist 不带，所以单独拉一次
 async function loadCats() {
-  try {
-    if (CFG.topic && CFG.topicCats.length) {
-      S.cats = CFG.topicCats.map(w => ({ type_id: 'kw:' + w, type_name: w }));
-      renderCats();
-      return;
-    }
-    const d = await api({ ac: 'list' });
-    if (d.class?.length) { S.cats = leafCats(d.class); renderCats(); }
-  } catch (e) { /* 分类拉不到不影响列表 */ }
-}
-
-// 苹果CMS 的父分类本身挂 0 部片，片子全在子分类里；只展示叶子分类。
-function leafCats(all) {
-  const parents = new Set(all.map(c => String(c.type_pid)));
-  const leaves = all.filter(c => !parents.has(String(c.type_id)));
-  return leaves.length ? leaves : all;
+  S.cats = Object.values(MAIN_GROUPS).flatMap(g => g.children.map(c => ({ type_id: String(c[0]), type_name: c[1] })));
+  renderCats();
 }
 
 function renderCats() {
   const box = $('#catsIn');
-  const items = [{ type_id: '', type_name: '全部' }, ...S.cats.slice(0, CFG.hotCats)];
-  box.innerHTML = items.map(c =>
-    `<button class="cat${String(c.type_id) === String(S.cat) ? ' on' : ''}" data-id="${c.type_id}">${esc(c.type_name)}</button>`
-  ).join('');
+  const main = `<button class="cat${!S.group && !S.cat ? ' on' : ''}" data-id="">全部</button>` +
+    Object.entries(MAIN_GROUPS).map(([key,g]) => `<button class="cat cat-main${S.group===key?' on':''}" data-group="${key}">${esc(g.name)}</button>`).join('');
+  let subs = '';
+  if (S.group && MAIN_GROUPS[S.group]) {
+    subs = '<span class="cat-divider" aria-hidden="true"></span>' + MAIN_GROUPS[S.group].children.map(c =>
+      `<button class="cat cat-sub${String(S.cat)===String(c[0])?' on':''}" data-id="${c[0]}">${esc(c[1])}</button>`).join('');
+  }
+  box.innerHTML = main + subs;
 }
 
 /* ── 完全开放：无账号、无会员、无试看限制 ── */
@@ -161,7 +160,9 @@ function render() {
     app.innerHTML = state('empty', S.kw ? `没有找到「${S.kw}」` : '这个分类暂时没有内容', '换个关键词或分类试试');
     return;
   }
-  const title = S.kw ? `搜索：${S.kw}` : (S.cats.find(c => String(c.type_id) === String(S.cat))?.type_name || '最新上架');
+  const subName = S.cats.find(c => String(c.type_id) === String(S.cat))?.type_name;
+  const groupName = S.group && MAIN_GROUPS[S.group] ? MAIN_GROUPS[S.group].name : '';
+  const title = S.kw ? `搜索：${S.kw}` : (groupName ? `${groupName} · ${subName || ''}` : (subName || '最新上架'));
   app.innerHTML = `
     ${trialBar()}
     <div class="sec-hd">
@@ -313,9 +314,13 @@ function closePlayer() {
 document.addEventListener('click', e => {
   const cat = e.target.closest('.cat');
   if (cat) {
-    const id = cat.dataset.id;
-    if (id.startsWith('kw:')) { S.cat = id; S.kw = id.slice(3); }
-    else { S.cat = id; S.kw = ''; }
+    const group = cat.dataset.group;
+    if (group && MAIN_GROUPS[group]) {
+      S.group = group; S.cat = String(MAIN_GROUPS[group].children[0][0]); S.kw = '';
+    } else {
+      S.cat = cat.dataset.id || ''; S.kw = '';
+      if (!S.cat) S.group = '';
+    }
     $('#q').value = ''; $('#clr').hidden = true;
     renderCats(); load(true); window.scrollTo({ top: 0 }); return;
   }
