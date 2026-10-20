@@ -4,48 +4,83 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0b0b0f">
-<title>幕光影院 — 开放电影放映室</title>
-<meta name="description" content="免费、无需注册的开放电影放映室，收录可合法公开观看的 Blender Open Movies。">
+<title>幕光影院 — 在线影视</title>
+<meta name="description" content="幕光影院 · 无需注册，完全开放浏览与观看">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link rel="stylesheet" href="style.css?v=1">
-<style>
-  .open-badge{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border:1px solid rgba(255,255,255,.1);border-radius:999px;color:#a7f3d0;background:rgba(52,211,153,.08);font-size:12px;font-weight:700}.open-badge:before{content:"";width:7px;height:7px;border-radius:50%;background:#6ee7b7;box-shadow:0 0 12px #6ee7b7}
-  .hero-cinema{padding:52px 0 22px}.hero-cinema h1{margin:12px 0 10px;font-size:clamp(32px,6vw,62px);letter-spacing:-.045em;line-height:1.05}.hero-cinema p{max-width:700px;margin:0;color:var(--muted,#999);font-size:15px;line-height:1.7}.back-home{color:#bbb;font-size:13px;text-decoration:none}.back-home:hover{color:#fff}.license-note{margin:38px 0 8px;padding:17px 19px;border:1px solid rgba(255,255,255,.08);border-radius:15px;background:rgba(255,255,255,.025);color:#8e919c;font-size:12px;line-height:1.7}.license-note a{color:#d8b46a}.thumb img{display:block!important;opacity:1!important}.c-sub{gap:7px}.free-tag{color:#78ddb2!important}.player-desc{padding:13px 18px 17px;color:#999;font-size:13px;line-height:1.65}.hd .hd-in{gap:18px}.hd-home{margin-left:auto;color:#aaa;font-size:13px;text-decoration:none}.hd-home:hover{color:#fff}
-  @media(max-width:700px){.hd-home{display:none}.hero-cinema{padding-top:35px}.search{order:3;width:100%;max-width:none}.hd-in{flex-wrap:wrap;padding-bottom:12px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:16px 10px!important}.c-name{font-size:14px!important}.c-name small{display:none}.c-sub{font-size:11px!important;flex-wrap:wrap}.thumb{border-radius:12px!important}}
-</style>
+<link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
+
 <header class="hd" id="hd">
   <div class="wrap hd-in">
-    <a class="brand" href="./" aria-label="影院首页">
-      <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5.5h18v13H3z"/><path d="m3 5.5 3.2-2.5M9.4 5.5 12.6 3M15.8 5.5 19 3"/><path d="M10 9.5v5l4.5-2.5z"/></svg></span>
-      <span class="brand-txt"><b>幕光影院</b><i>OPEN CINEMA</i></span>
+    <a class="brand" href="#/" aria-label="回到首页">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 5.5h18v13H3z"/><path d="m3 5.5 3.2-2.5M9.4 5.5 12.6 3M15.8 5.5 19 3"/>
+          <path d="M10 9.5v5l4.5-2.5z"/>
+        </svg>
+      </span>
+      <span class="brand-txt"><b>幕光影院</b><i>MUGUANG</i></span>
     </a>
+
     <form class="search" id="searchForm" role="search">
-      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-      <input id="q" type="search" placeholder="搜索片名、类型" autocomplete="off" aria-label="搜索">
-      <button type="button" class="clr" id="clr" aria-label="清空" hidden>×</button>
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>
+      </svg>
+      <input id="q" type="search" placeholder="搜索片名、演员、类型" autocomplete="off" aria-label="搜索">
+      <button type="button" class="clr" id="clr" aria-label="清空" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
     </form>
-    <a class="hd-home" href="../">返回个人主页 ↗</a>
+    <a href="../" style="color:#aaa;font-size:13px;text-decoration:none;white-space:nowrap">个人主页 ↗</a>
+
+
+    <button class="menu-btn" id="menuBtn" aria-label="打开分类" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
   </div>
-  <nav class="cats" aria-label="分类导航"><div class="cats-in" id="catsIn"></div></nav>
+
+  <nav class="cats" id="cats" aria-label="分类导航"><div class="cats-in" id="catsIn"></div></nav>
 </header>
 
-<section class="wrap hero-cinema">
-  <span class="open-badge">无需登录 · 完全开放</span>
-  <h1>开放电影放映室</h1>
-  <p>精选可公开传播的 Blender Open Movies。无账号、无会员、无试看限制，点击海报即可直接观看。</p>
-</section>
+<div class="wrap" style="padding-top:22px;color:#74e0b5;font-size:13px;font-weight:700">● 无需登录 · 无试看限制 · 完全开放</div>
 <main id="app" class="wrap" role="main"></main>
-<footer class="ft"><div class="wrap ft-in"><span class="ft-brand">幕光影院 · OPEN CINEMA</span><span class="ft-note">仅收录有明确开放许可的影片</span></div></footer>
 
+<footer class="ft">
+  <div class="wrap ft-in">
+    <span class="ft-brand">幕光影院 · MUGUANG CINEMA</span>
+    <span class="ft-note">无需注册 · 完全开放 · 三线自动切换</span>
+  </div>
+</footer>
+
+<!-- 播放器浮层 -->
 <div class="player-mask" id="pmask" hidden>
   <div class="player-box" role="dialog" aria-modal="true" aria-label="视频播放">
-    <div class="player-hd"><h3 id="pTitle">—</h3><button class="pclose" id="pclose" aria-label="关闭播放器"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
-    <div class="player-video"><video id="video" controls playsinline preload="metadata"></video></div>
-    <div class="player-desc" id="pDesc"></div>
+    <div class="player-hd">
+      <h3 id="pTitle">—</h3>
+      <button class="pclose" id="pclose" aria-label="关闭播放器">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="player-video">
+      <video id="video" controls playsinline preload="none"></video>
+      <div class="pfall" id="pfall" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16h.01"/>
+        </svg>
+        <p id="pfWhy">这条线路暂时打不开</p>
+        <small id="pfTip">片源服务器的问题，换一集或换一部试试</small>
+        <div class="pf-btns">
+          <button id="pfSwitch" type="button" hidden>换条线路</button>
+          <a id="pfLink" href="#" target="_blank" rel="noopener">用外部播放器打开</a>
+        </div>
+      </div>
+    </div>
+    <div class="eps" id="eps"></div>
   </div>
 </div>
-<script src="app.js?v=1"></script>
+
+<script src="hls.min.js"></script>
+<script src="app.js?v=2"></script>
 </body>
 </html>
