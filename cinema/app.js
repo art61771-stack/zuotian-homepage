@@ -56,7 +56,7 @@ async function api(params, allowFailover = true) {
 
 /* ── 状态 ───────────────────────────── */
 const S = { cat: '', group: '', kw: '', page: 1, pages: 1, total: 0, list: [], cats: [], loading: false,
-            line: 0, dead: new Set() };
+            line: 0, dead: new Set(), req: 0 };
 
 /* ── 骨架屏 ─────────────────────────── */
 const skeleton = (n = 18) =>
@@ -125,7 +125,7 @@ function trialBar() { return ''; }
 
 /* ── 列表 ───────────────────────────── */
 async function load(reset = false) {
-  if (S.loading) return;
+  const req = ++S.req;
   S.loading = true;
   const app = $('#app');
   if (reset) { S.page = 1; S.list = []; app.innerHTML = skeleton(); }
@@ -134,14 +134,15 @@ async function load(reset = false) {
     const wd = [CFG.topic, S.kw].filter(Boolean).join(' ') || null;
     const d = await api({ ac: 'videolist', pg: S.page, pagesize: CFG.pageSize,
                           t: (CFG.topic ? null : (S.cat || null)), wd });
+    if (req !== S.req) return;
     S.pages = d.pagecount || 1;
     S.total = d.total || 0;
     S.list.push(...(d.list || []));
     render();
   } catch (e) {
-    app.innerHTML = state('load-fail', '内容加载失败', '请检查网络后重试');
+    if (req === S.req) app.innerHTML = state('load-fail', '内容加载失败', '请检查网络后重试');
   } finally {
-    S.loading = false;
+    if (req === S.req) S.loading = false;
   }
 }
 
