@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Zuotian 的个人主页">
+  <title>Zuotian</title>
+  <style>
+    :root { color-scheme: dark; --bg:#08090c; --card:#11141a; --text:#f5f7fb; --muted:#9ba3b4; --line:#242a35; --accent:#8ea7ff; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:radial-gradient(circle at 20% 10%,#17213b 0,transparent 32%),radial-gradient(circle at 85% 75%,#211735 0,transparent 28%),var(--bg); color:var(--text); display:grid; place-items:center; padding:24px; }
+    main { width:min(760px,100%); padding:clamp(30px,7vw,72px); border:1px solid var(--line); border-radius:28px; background:rgba(17,20,26,.78); backdrop-filter:blur(18px); box-shadow:0 24px 90px rgba(0,0,0,.4); }
+    .eyebrow { color:var(--accent); font-size:13px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; }
+    h1 { margin:16px 0 14px; font-size:clamp(48px,12vw,96px); line-height:.95; letter-spacing:-.06em; }
+    p { margin:0; max-width:560px; color:var(--muted); font-size:clamp(17px,3vw,21px); line-height:1.65; }
+    nav { display:flex; flex-wrap:wrap; gap:12px; margin-top:34px; }
+    a { color:var(--text); text-decoration:none; border:1px solid var(--line); border-radius:999px; padding:12px 18px; transition:.2s ease; }
+    a:hover { transform:translateY(-2px); border-color:var(--accent); background:rgba(142,167,255,.1); }
+    footer { margin-top:56px; color:#626b7c; font-size:13px; }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="eyebrow">zuotian.loc.cc</div>
+    <h1>你好，我是 Zuotian。</h1>
+    <p>这里是我的个人主页。正在创造、学习，也在把有趣的想法变成真正能用的作品。</p>
+    <nav>
+      <a href="https://github.com/art61771-stack" rel="me">GitHub</a>
+    </nav>
+    <footer>© 2026 Zuotian · Powered by GitHub Pages</footer>
+  </main>
+</body>
+</html>
