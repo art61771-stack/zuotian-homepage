@@ -4,7 +4,7 @@
 const CFG = {
   // 线路表：/api/ 是主源，/api2/ /api3/ 是备源（.api-proxy 写第2、3行才有）。
   // 主源拿不到数据时自动往后切；只配了一个源的站，后两条会 404，跳过即可。
-  apis: ['https://web-production-a7e0b.up.railway.app/vod-api/', 'https://web-production-a7e0b.up.railway.app/vod-api2/', 'https://web-production-a7e0b.up.railway.app/vod-api3/'],
+  apis: ['https://broken-cell-18fb.bwu9183.workers.dev/vod-api/', 'https://broken-cell-18fb.bwu9183.workers.dev/vod-api2/', 'https://broken-cell-18fb.bwu9183.workers.dev/vod-api3/'],
   pageSize: 24,              // 每页数量
   hotCats: 12,               // 分类条最多展示几个
 
